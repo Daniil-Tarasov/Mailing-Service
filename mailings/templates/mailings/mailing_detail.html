@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'mailings/base.html' %}
+
+{% block title %}Рассылка{{{% endblock %}
+
+{% block content %}
 <p>email: {{ object.date_of_first_sending }} </p>
 <p>Ф.И.О.: {{ object.date_of_sending_end }}</p>
 <p>Комментарий: {{ object.status }}</p>
 <p>message: {{ object.message }}</p>
 <p>Комментарий: {{ object.recipients }}</p>
-</body>
-</html>
+<div class="d-flex">
+    <a class="link" href="/mailing/{{ object.id }}/update/">Редактировать</a>
+</div>
+{% endblock %}

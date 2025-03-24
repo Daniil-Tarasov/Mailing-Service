@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-</head>
-<body>
-    <h1>Статистика рассылок</h1>
+{% extends 'mailings/base.html' %}
 
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<main class="px-3">
+    <h1>Статистика рассылок</h1>
     <div>
         <p>Количество всех рассылок: {{ total_mailings }}</p>
         <p>Количество активных рассылок: {{ mailings_active }}</p>
         <p>Количество уникальных получателей: {{ unique_recipients }}</p>
     </div>
-</body>
-</html>
+</main>
+{% endblock %}

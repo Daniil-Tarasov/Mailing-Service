@@ -1,0 +1,17 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Клиенты{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Список ваших клиентов</h1>
+</div>
+<div>
+    {% for recipient in object_list %}
+    email: {{ recipient.email }}
+    <a href="/mailing_recipient/{{ recipient.id }}">
+        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее</button>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

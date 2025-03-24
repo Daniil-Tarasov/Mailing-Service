@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 
 from mailings.models import MailingRecipient, Message, Mailing
 
@@ -21,6 +21,10 @@ class HomeView(View):
         return render(request, self.template_name, context)
 
 
+class MailingRecipientsListView(ListView):
+    model = MailingRecipient
+
+
 class MailingRecipientCreateView(CreateView):
     template_name = 'mailings/mailing_recipient_form.html'
     model = MailingRecipient
@@ -34,6 +38,7 @@ class MailingRecipientDetailView(DetailView):
 class MailingRecipientUpdateView(UpdateView):
     template_name = 'mailings/mailing_recipient_form.html'
     model = MailingRecipient
+    fields = '__all__'
 
 
 class MailingRecipientDeleteView(DeleteView):
@@ -61,6 +66,10 @@ class MessageDeleteView(DeleteView):
     model = Message
 
 
+class MailingsListView(ListView):
+    model = Mailing
+
+
 class MailingCreateView(CreateView):
     model = Mailing
     template_name = 'mailings/mailing_form.html'
@@ -74,6 +83,7 @@ class MailingDetailView(DetailView):
 class MailingUpdateView(UpdateView):
     model = Mailing
     template_name = 'mailings/mailing_form.html'
+    fields = '__all__'
 
 
 class MailingDeleteView(DeleteView):
