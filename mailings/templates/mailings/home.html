@@ -4,11 +4,15 @@
 
 {% block content %}
 <main class="px-3">
-    <h1>Статистика рассылок</h1>
-    <div>
-        <p>Количество всех рассылок: {{ total_mailings }}</p>
-        <p>Количество активных рассылок: {{ mailings_active }}</p>
-        <p>Количество уникальных получателей: {{ unique_recipients }}</p>
+    <div class="text-center">
+        <h1>Статистика рассылок</h1>
+        <div class="pt-md-5 pb-md-4">
+            <p>Количество всех рассылок: {{ total_mailings }}</p>
+            <p>Количество активных рассылок: {{ mailings_active }}</p>
+            <p>Количество уникальных получателей: {{ unique_recipients }}</p>
+            <a class="btn btn-outline-light me-2" href="#">Отправить рассылку</a>
+        </div>
     </div>
+
 </main>
 {% endblock %}

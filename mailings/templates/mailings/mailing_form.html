@@ -1,11 +1,24 @@
 {% extends 'mailings/base.html' %}
 
-{% block title %}Новая рассылка{% endblock %}
+{% block title %}
+{% if object %}
+Редактирование рассылки
+{% else %}
+Новая рассылка
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <form method="post" action="" class="form-floating">
     {% csrf_token %}
     {{ form.as_p }}
+    {% if object %}
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    <a class="link" href="/mailing/">
+        <button type="button" class="btn btn-danger">Отмена</button>
+    </a>
+    {% else %}
     <button type="submit" class="btn btn-success">Создать рассылку</button>
+    {% endif %}
 </form>
 {% endblock %}

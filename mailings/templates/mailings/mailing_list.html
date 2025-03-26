@@ -4,13 +4,14 @@
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Список ваших рассылок</h1>
+    <h1>Список ваших рассылок</h1>
+    <a class="btn btn-outline-light me-2" href="/mailing/create/">Добавить рассылку</a>
 </div>
-<div>
+<div class="row px-5 py-3 pb-md-4">
     {% for mailing in object_list %}
     status: {{ mailing.status }}
     <a href="/mailing/{{ mailing.id }}">
-        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее</button>
+        <button type="button" class="btn row btn-lg btn-block btn-light">Подробнее</button>
     </a>
     {% endfor %}
 </div>

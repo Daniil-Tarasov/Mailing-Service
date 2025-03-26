@@ -1,11 +1,24 @@
 {% extends 'mailings/base.html' %}
 
-{% block title %}Новый клиент{% endblock %}
+{% block title %}
+{% if object %}
+Редактирование клиента
+{% else %}
+Новый клиент
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <form method="post" action="" class="form-floating">
     {% csrf_token %}
     {{ form.as_p }}
+    {% if object %}
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    <a class="link" href="/mailing_recipient/">
+        <button type="button" class="btn btn-danger">Отмена</button>
+    </a>
+    {% else %}
     <button type="submit" class="btn btn-success">Добавить клиента</button>
+    {% endif %}
 </form>
 {% endblock %}
