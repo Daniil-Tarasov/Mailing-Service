@@ -4,7 +4,7 @@
 
 {% block content %}
 <p>Тема: {{ object.subject }} </p>
-<p>Тело письма: {{ object.message }}</p>
+<p>Содержание: {{ object.message }}</p>
 <div class="row">
     <a class="link" href="/message/{{ object.id }}/update/">Редактировать</a>
     <a class="link" href="/message/{{ object.id }}/delete/">Удалить</a>
