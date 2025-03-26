@@ -11,7 +11,7 @@
     {% for mailing in object_list %}
     status: {{ mailing.status }}
     <a href="/mailing/{{ mailing.id }}">
-        <button type="button" class="btn row btn-lg btn-block btn-light">Подробнее</button>
+        <button type="button" class="btn row btn-lg btn-block btn-outline-info btn-sm">Подробнее</button>
     </a>
     {% endfor %}
 </div>

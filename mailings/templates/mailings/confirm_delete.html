@@ -9,9 +9,11 @@
 <form method="post" action="" class="form-floating">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a class="link" href="/">
-        <button type="button" class="btn btn-success">Отмена</button>
-    </a>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a class="link" href="/">
+            <button type="button" class="btn btn-success">Отмена</button>
+        </a>
+    </div>
 </form>
 {% endblock %}

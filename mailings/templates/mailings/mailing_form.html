@@ -9,16 +9,29 @@
 {% endblock %}
 
 {% block content %}
+<div class="text-center">
+    <h1>
+        {% if object %}
+        Редактируйте рассылку
+        {% else %}
+        Создайте рассылку
+        {% endif %}
+    </h1>
+</div>
 <form method="post" action="" class="form-floating">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {% if object %}
-    <button type="submit" class="btn btn-success">Сохранить изменения</button>
-    <a class="link" href="/mailing/">
-        <button type="button" class="btn btn-danger">Отмена</button>
-    </a>
-    {% else %}
-    <button type="submit" class="btn btn-success">Создать рассылку</button>
-    {% endif %}
+    <div class="d-flex justify-content-center py-3">
+        <div class="col-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if object %}
+            <button type="submit" class="btn btn-outline-success">Сохранить изменения</button>
+            <a class="link" href="/mailing/">
+                <button type="button" class="btn btn-outline-danger">Отмена</button>
+            </a>
+            {% else %}
+            <button type="submit" class="btn btn-outline-success">Создать рассылку</button>
+            {% endif %}
+        </div>
+    </div>
 </form>
 {% endblock %}

@@ -5,14 +5,22 @@
 {% block content %}
 <main class="px-3">
     <div class="text-center">
-        <h1>Статистика рассылок</h1>
-        <div class="pt-md-5 pb-md-4">
-            <p>Количество всех рассылок: {{ total_mailings }}</p>
-            <p>Количество активных рассылок: {{ mailings_active }}</p>
-            <p>Количество уникальных получателей: {{ unique_recipients }}</p>
-            <a class="btn btn-outline-light me-2" href="#">Отправить рассылку</a>
+        <h1>Сервис для отправки рассылок</h1>
+        <div class="d-flex justify-content-center py-3">
+            <div class="col-4">
+                <div class="card text-white" style="background-color: black; border: 2px solid white;">
+                    <div class="card-header">
+                        <h3>Статистика рассылок</h3>
+                    </div>
+                    <p>Количество всех рассылок: {{ total_mailings }}</p>
+                    <p>Количество активных рассылок: {{ mailings_active }}</p>
+                    <p>Количество уникальных получателей: {{ unique_recipients }}</p>
+                </div>
+                <div class="py-3">
+                    <a class="btn btn-outline-light me-2" href="#">Отправить рассылку</a>
+                </div>
+            </div>
         </div>
     </div>
-
 </main>
 {% endblock %}

@@ -11,7 +11,7 @@
     {% for message in object_list %}
     Тема письма: {{ message.subject }}
     <a href="/message/{{ message.id }}">
-        <button type="button" class="btn row btn-lg btn-block btn-light">Подробнее</button>
+        <button type="button" class="btn row btn-lg btn-block btn-outline-info btn-sm">Подробнее</button>
     </a>
     {% endfor %}
 </div>
