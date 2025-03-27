@@ -15,7 +15,7 @@ class MailingRecipient(models.Model):
 
 class Message(models.Model):
     subject = models.CharField(max_length=150, verbose_name='Тема письма')
-    message = models.TextField(verbose_name='Тело письма')
+    message = models.TextField(verbose_name='Текст сообщения')
 
     def __str__(self):
         return f'{self.subject}'
@@ -49,7 +49,7 @@ class Mailing(models.Model):
     recipients = models.ManyToManyField(
         'MailingRecipient',
         related_name='mailing',
-        verbose_name="Получатель"
+        verbose_name="Получатели"
     )
 
     def __str__(self):

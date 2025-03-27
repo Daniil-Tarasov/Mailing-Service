@@ -9,10 +9,17 @@
 </div>
 <div class="row px-5 py-3 pb-md-4">
     {% for mailing in object_list %}
-    status: {{ mailing.status }}
-    <a href="/mailing/{{ mailing.id }}">
-        <button type="button" class="btn row btn-lg btn-block btn-outline-info btn-sm">Подробнее</button>
-    </a>
+    <p>Сообщение: {{ mailing.message }}</p>
+    <p>Статус: {{ mailing.status }}</p>
+    <div class="d-flex">
+        <form method="post" action="{% url 'mailings:send_mailing' mailing.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success btn-sm">Отправить</button>
+        </form>
+        <a href="/mailing/{{ mailing.id }}">
+            <button type="button" class="btn btn-outline-info btn-sm">Подробнее</button>
+        </a>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

@@ -9,7 +9,7 @@
 </div>
 <div class="row px-5 py-3 pb-md-4">
     {% for recipient in object_list %}
-    <p>email: {{ recipient.email }} </p>
+    <p>Email: {{ recipient.email }} </p>
     <p>Ф.И.О.: {{ recipient.full_name }}</p>
     <a href="/mailing_recipient/{{ recipient.id }}">
         <button type="button" class="btn btn-lg btn-block btn-outline-info btn-sm">Подробнее</button>
