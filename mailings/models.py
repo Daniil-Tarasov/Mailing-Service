@@ -37,7 +37,7 @@ class Mailing(models.Model):
 
     date_of_first_sending = models.DateTimeField(null=True, blank=True, verbose_name="Дата и время первой отправки")
     date_of_sending_end = models.DateTimeField(null=True, blank=True, verbose_name="Дата и время окончания отправки")
-    status = models.CharField(max_length=10, choices=STATUS_MAILING, default=CREATED, verbose_name="Статус")
+    status = models.CharField(max_length=10, choices=STATUS_MAILING, default=CREATED, verbose_name="Статус рассылки")
     message = models.ForeignKey(
         'Message',
         on_delete=models.SET_NULL,
@@ -53,9 +53,31 @@ class Mailing(models.Model):
     )
 
     def __str__(self):
-        return f'{self.recipients} - {self.message}: {self.status}'
+        return f'{self.message}: {self.status}'
 
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+        ordering = ['status']
+
+
+class MailingAttempts(models.Model):
+    successfully = 'Успешно'
+    not_successfully = 'Не успешно'
+    STATUS_ATTEMPT = [
+        (successfully, 'Успешно'),
+        (not_successfully, 'Не успешно'),
+    ]
+
+    date_first_attempt = models.DateTimeField(auto_now=True, verbose_name='Дата и время попытки')
+    status = models.CharField(max_length=20, choices=STATUS_ATTEMPT, verbose_name='Статус попытки рассылки')
+    mail_server_response = models.TextField(null=True, blank=True, verbose_name='Ответ почтового сервиса')
+    mailing = models.ForeignKey('Mailing', on_delete=models.CASCADE, related_name='mailing_attempts', verbose_name='Рассылка')
+
+    def __str__(self):
+        return f'{self.mailing} - {self.status}: {self.mail_server_response}'
+
+    class Meta:
+        verbose_name = 'Попытка рассылки'
+        verbose_name_plural = 'Попытки рассылки'
         ordering = ['status']
