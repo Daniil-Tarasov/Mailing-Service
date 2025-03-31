@@ -4,10 +4,10 @@ from django.contrib.auth.views import PasswordResetView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, UpdateView
 
 from config import settings
-from users.forms import UserRegisterForm
+from users.forms import UserRegisterForm, UserForm
 from users.models import User
 
 
@@ -47,3 +47,18 @@ class PasswordResetUserView(PasswordResetView):
     subject_template_name = 'password_reset_subject.txt'
     from_email = settings.DEFAULT_FROM_EMAIL
     success_url = reverse_lazy('users:password_reset_done')
+
+
+class UserDetailView(DetailView):
+    template_name = 'user_detail.html'
+    model = User
+
+
+class UserUpdateView(UpdateView):
+    template_name = 'user_form.html'
+    model = User
+    form_class = UserForm
+    success_url = reverse_lazy('mailings:home')
+
+    def get_success_url(self):
+        return reverse('users:user_detail', args=[self.kwargs.get('pk')])

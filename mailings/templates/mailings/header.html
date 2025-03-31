@@ -9,7 +9,7 @@
         </ul>
           {% if user.is_authenticated %}
         <ul class="nav mb-md-0">
-          <li><a href="#" class="nav-link px-2 text-white">Профиль</a></li>
+          <li><a href="/user/{{ user.id }}/" class="nav-link px-2 text-white">Профиль</a></li>
         </ul>
         <div class="text-end">
           <form method="post" action=/logout/>

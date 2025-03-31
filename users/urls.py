@@ -1,8 +1,8 @@
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetDoneView, \
-    PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetDoneView, PasswordResetConfirmView, \
+     PasswordResetCompleteView
 from django.urls import path, reverse_lazy
 from users.apps import UsersConfig
-from users.views import UserCreateView, email_verification, PasswordResetUserView
+from users.views import UserCreateView, email_verification, PasswordResetUserView, UserDetailView, UserUpdateView
 
 app_name = UsersConfig.name
 
@@ -24,5 +24,7 @@ urlpatterns = [
     path('reset/done/', PasswordResetCompleteView.as_view(
         template_name='password_reset_complete.html'
     ),
-         name='password_reset_complete')
+         name='password_reset_complete'),
+    path('user/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
+    path('user/<int:pk>/update/', UserUpdateView.as_view(), name='user_update')
 ]

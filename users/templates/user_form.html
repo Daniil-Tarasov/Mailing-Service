@@ -1,0 +1,25 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}
+Редактируйте свой профиль
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>
+        Здесь вы можете отредактировать свой профиль.
+    </h1>
+</div>
+<form method="post" action="" class="form-floating">
+    <div class="d-flex justify-content-center py-3">
+        <div class="col-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-success">Сохранить изменения</button>
+            <a class="link" href="/">
+                <button type="button" class="btn btn-outline-danger">Отмена</button>
+            </a>
+        </div>
+    </div>
+</form>
+{% endblock %}

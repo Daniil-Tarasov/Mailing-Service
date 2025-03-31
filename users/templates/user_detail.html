@@ -1,0 +1,22 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}
+Профиль {{ user.email }}
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>
+        Профиль
+    </h1>
+  <p>Это ваш профиль. Здесь вы можете посмотреть вашу информацию, а также информацию о количестве успешных/неуспешных</p>
+      <p>попыток рассылок и количестве отправленных сообщений.</p>
+</div>
+<div>
+  <p>Аватар: <img src="{{ user.avatar }}" style="width: 50px" alt="{{ user.email }}"></p>
+  <p>Email: {{ user.email }}</p>
+  <p>Номер телефона {{ user.phone_number }}</p>
+  <p>Страна: {{ user.country }}</p>
+  <a class="link" href="/user/{{ user.id }}/update/">Редактировать</a>
+</div>
+{% endblock %}
