@@ -9,8 +9,9 @@ from mailings.models import Mailing, MailingAttempts
 
 def send_mailing(mailing):
     mailing.status = Mailing.LAUNCHED
-    mailing.date_of_first_sending = timezone.now()
-    mailing.save()
+    if mailing.date_of_first_sending is None:
+        mailing.date_of_first_sending = timezone.now()
+        mailing.save()
 
     attempt, create = MailingAttempts.objects.get_or_create(
         mailing=mailing,

@@ -37,7 +37,7 @@ class MailingRecipientCreateView(CreateView):
     success_url = reverse_lazy('mailings:mailing_recipients_list')
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+# @method_decorator(cache_page(60 * 15), name='dispatch')
 class MailingRecipientDetailView(DetailView):
     model = MailingRecipient
 
@@ -97,7 +97,7 @@ class MailingsListView(ListView):
         queryset = cache.get('my_queryset')
         if not queryset:
             queryset = super().get_queryset()
-            cache.set('my_queryset', queryset, 60 * 15)  # Кешируем данные на 15 минут
+            cache.set('my_queryset', queryset, 60 * 15)
         return queryset
 
 
@@ -109,6 +109,11 @@ class MailingCreateView(CreateView):
 
 class MailingDetailView(DetailView):
     model = Mailing
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['attempts'] = self.object.mailing_attempts.all()
+        return context
 
 
 class MailingUpdateView(UpdateView):

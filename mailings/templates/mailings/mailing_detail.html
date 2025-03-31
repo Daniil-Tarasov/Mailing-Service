@@ -3,11 +3,16 @@
 {% block title %}Рассылка{% endblock %}
 
 {% block content %}
-<p>Статус рассылки: {{ object.status }}</p>
 <p>Сообщение: {{ object.message }}</p>
-<p>Клиенты: {% for recipient in object.recipients.all %}{{ recipient.full_name }}{% endfor %}</p>
+<p>Статус рассылки: {{ object.status }}</p>
+{% for attempt in attempts %}
+<p>Статус попытки рассылки: {{ attempt.status|default:"-" }}</p>
+<p>Ответ почтового сервиса: {{ attempt.mail_server_response|default:"-" }}</p>
+<p>Клиенты: {% for recipient in object.recipients.all %}{{ recipient.full_name|default:"-" }}{% endfor %}</p>
 <p>Дата первой отправки: {{ object.date_of_first_sending|date:"d.m.Y H:i"|default:"-" }} </p>
 <p>Дата окончания отправки: {{ object.date_of_sending_end|date:"d.m.Y H:i"|default:"-" }}</p>
+<p>Дата попытки отправки: {{ attempt.date_first_attempt|date:"d.m.Y H:i"|default:"-" }}</p>
+{% endfor %}
 <div class="row">
     <a class="link" href="/mailing/{{ object.id }}/update/">Редактировать</a>
     <a class="link" href="{% url 'mailings:mailing_delete' object.id %}">Удалить</a>
