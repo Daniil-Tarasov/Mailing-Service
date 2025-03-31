@@ -1,6 +1,9 @@
+from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 
 from mailings.forms import MailingRecipientForm, MessageForm, MailingForm
@@ -34,6 +37,7 @@ class MailingRecipientCreateView(CreateView):
     success_url = reverse_lazy('mailings:mailing_recipients_list')
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class MailingRecipientDetailView(DetailView):
     model = MailingRecipient
 
@@ -52,6 +56,7 @@ class MessageListView(ListView):
     model = Message
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class MailingRecipientDeleteView(DeleteView):
     model = MailingRecipient
     template_name = 'mailings/confirm_delete.html'
@@ -64,6 +69,7 @@ class MessageCreateView(CreateView):
     success_url = reverse_lazy('mailings:message_list')
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class MessageDetailView(DetailView):
     model = Message
 
@@ -86,6 +92,13 @@ class MessageDeleteView(DeleteView):
 
 class MailingsListView(ListView):
     model = Mailing
+
+    def get_queryset(self):
+        queryset = cache.get('my_queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('my_queryset', queryset, 60 * 15)  # Кешируем данные на 15 минут
+        return queryset
 
 
 class MailingCreateView(CreateView):

@@ -75,7 +75,7 @@ class MailingAttempts(models.Model):
     mailing = models.ForeignKey('Mailing', on_delete=models.CASCADE, related_name='mailing_attempts', verbose_name='Рассылка')
 
     def __str__(self):
-        return f'{self.mailing} - {self.status}: {self.mail_server_response}'
+        return f'{self.status}: {self.mail_server_response}'
 
     class Meta:
         verbose_name = 'Попытка рассылки'
