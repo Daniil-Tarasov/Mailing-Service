@@ -8,7 +8,7 @@ class MailingRecipientForm(ModelForm):
 
     class Meta:
         model = MailingRecipient
-        fields = '__all__'
+        exclude = ('owner',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,7 +35,7 @@ class MessageForm(ModelForm):
 
     class Meta:
         model = Message
-        fields = '__all__'
+        exclude = ('owner',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,7 +55,7 @@ class MailingForm(ModelForm):
 
     class Meta:
         model = Mailing
-        exclude = ('date_of_first_sending', 'date_of_sending_end', 'status',)
+        exclude = ('date_of_first_sending', 'date_of_sending_end', 'status', 'owner',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

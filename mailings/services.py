@@ -13,7 +13,7 @@ def send_mailing(mailing):
         mailing.date_of_first_sending = timezone.now()
         mailing.save()
 
-    attempt, create = MailingAttempts.objects.get_or_create(
+    attempt = MailingAttempts.objects.create(
         mailing=mailing,
         defaults={'status': MailingAttempts.not_successfully}
     )

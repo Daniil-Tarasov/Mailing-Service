@@ -1,9 +1,14 @@
 from django.db import models
 
+from users.models import User
+
+
 class MailingRecipient(models.Model):
     email = models.CharField(max_length=100, unique=True, verbose_name='Email')
     full_name = models.CharField(max_length=150, verbose_name='Ф.И.О.')
     comment = models.TextField(verbose_name='Комментарий', null=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Владелец', related_name='mailing_recipient',
+                              null=True)
 
     def __str__(self):
         return f'{self.full_name} - {self.email}'
@@ -16,6 +21,8 @@ class MailingRecipient(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=150, verbose_name='Тема письма')
     message = models.TextField(verbose_name='Текст сообщения')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Владелец', related_name='message',
+                              null=True)
 
     def __str__(self):
         return f'{self.subject}'
@@ -51,6 +58,8 @@ class Mailing(models.Model):
         related_name='mailing',
         verbose_name="Получатели"
     )
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Владелец', related_name='mailing',
+                              null=True)
 
     def __str__(self):
         return f'{self.message}: {self.status}'
