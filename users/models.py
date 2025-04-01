@@ -10,6 +10,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='users/images', verbose_name='Аватар', blank=True, null=True)
     phone_number = PhoneNumberField(verbose_name='Номер телефона', blank=True, null=True)
     country = models.CharField(max_length=60, verbose_name='Страна', blank=True, null=True)
+    count_sent_messages = models.IntegerField(default=0, blank=True, null=True, verbose_name='Количество отправленных сообщений')
 
     token = models.CharField(max_length=100, verbose_name='Токен', blank=True, null=True)
 

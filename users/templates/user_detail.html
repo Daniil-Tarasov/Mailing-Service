@@ -15,8 +15,11 @@
 <div>
   <p>Аватар: <img src="{{ user.avatar }}" style="width: 50px" alt="{{ user.email }}"></p>
   <p>Email: {{ user.email }}</p>
-  <p>Номер телефона: {{ user.phone_number }}</p>
-  <p>Страна: {{ user.country }}</p>
+  <p>Номер телефона: {{ user.phone_number|default:"-" }}</p>
+  <p>Страна: {{ user.country|default:"-" }}</p>
   <a class="link" href="/user/{{ user.id }}/update/">Редактировать</a>
+  <p>Кол-во успешных рассылок: {{ successful_attempts }} </p>
+  <p>Кол-во не успешных рассылок: {{ unsuccessful_attempts }} </p>
+  <p>Кол-во отправленных сообщений: {{ user.count_sent_messages }}</p>
 </div>
 {% endblock %}

@@ -2,9 +2,11 @@ import smtplib
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db.models import F
 from django.utils import timezone
 
 from mailings.models import Mailing, MailingAttempts
+from users.models import User
 
 
 def send_mailing(mailing):
@@ -14,14 +16,16 @@ def send_mailing(mailing):
         mailing.save()
 
     attempt = MailingAttempts.objects.create(
-        mailing=mailing,
-        defaults={'status': MailingAttempts.not_successfully}
+        status=MailingAttempts.not_successfully,
+        mailing=mailing
     )
 
     try:
         message = mailing.message
         subject = message.subject
         body = message.message
+
+        recipients_count = mailing.recipients.count()
 
         for recipient in mailing.recipients.all():
             send_mail(
@@ -31,6 +35,10 @@ def send_mailing(mailing):
                 [recipient.email],
                 fail_silently=False,
             )
+
+        User.objects.filter(pk=mailing.owner.pk).update(
+            count_sent_messages=F('count_sent_messages') + recipients_count
+        )
 
         attempt.status = MailingAttempts.successfully
         mailing.status = Mailing.COMPLETED

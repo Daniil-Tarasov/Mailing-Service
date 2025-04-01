@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
 from config import settings
+from mailings.models import MailingAttempts
 from users.forms import UserRegisterForm, UserForm
 from users.models import User
 
@@ -52,6 +53,24 @@ class PasswordResetUserView(PasswordResetView):
 class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.object
+
+        successful_attempts = MailingAttempts.objects.filter(
+            mailing__owner=user,
+            status=MailingAttempts.successfully
+        ).count()
+
+        unsuccessful_attempts = MailingAttempts.objects.filter(
+            mailing__owner=user,
+            status=MailingAttempts.not_successfully
+        ).count()
+
+        context['successful_attempts'] = successful_attempts
+        context['unsuccessful_attempts'] = unsuccessful_attempts
+        return context
 
 
 class UserUpdateView(UpdateView):
