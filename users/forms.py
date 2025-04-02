@@ -31,6 +31,7 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserForm(ModelForm):
+
     class Meta:
         model = User
         fields = ('avatar', 'phone_number', 'country',)
@@ -51,3 +52,10 @@ class UserForm(ModelForm):
             'placeholder': 'Укажите страну',
             'class': 'form-control'
         })
+
+
+class ManagerForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('is_active',)

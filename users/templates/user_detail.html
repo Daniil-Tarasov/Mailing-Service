@@ -11,6 +11,11 @@
     </h1>
   <p>Это ваш профиль. Здесь вы можете посмотреть вашу информацию, а также информацию о количестве успешных/неуспешных</p>
       <p>попыток рассылок и количестве отправленных сообщений.</p>
+  {% if perms.user.can_view_all_users %}
+  <a href="/user/">
+      <button type="button" class="btn btn-outline-info btn-sm">Список пользователей</button>
+  </a>
+  {% endif %}
 </div>
 <div>
   <p>Аватар: <img src="{{ user.avatar }}" style="width: 50px" alt="{{ user.email }}"></p>

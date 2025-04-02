@@ -5,8 +5,10 @@
 {% block content %}
 <p>Тема: {{ object.subject }} </p>
 <p>Содержание: {{ object.message }}</p>
+{% if object.owner == request.user %}
 <div class="row">
     <a class="link" href="/message/{{ object.id }}/update/">Редактировать</a>
     <a class="link" href="/message/{{ object.id }}/delete/">Удалить</a>
 </div>
+{% endif %}
 {% endblock %}

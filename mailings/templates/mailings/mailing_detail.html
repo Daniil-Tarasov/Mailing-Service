@@ -13,8 +13,14 @@
 <p>Дата окончания отправки: {{ object.date_of_sending_end|date:"d.m.Y H:i"|default:"-" }}</p>
 <p>Дата попытки отправки: {{ attempt.date_first_attempt|date:"d.m.Y H:i"|default:"-" }}</p>
 {% endfor %}
+{% if object.owner == request.user %}
 <div class="row">
     <a class="link" href="/mailing/{{ object.id }}/update/">Редактировать</a>
     <a class="link" href="{% url 'mailings:mailing_delete' object.id %}">Удалить</a>
 </div>
+{% elif perms.user.can_disabling_mailings %}
+<div class="row">
+    <a class="link" href="/mailing/{{ object.id }}/update/">Отключить/Включить</a>
+</div>
+{% endif %}
 {% endblock %}

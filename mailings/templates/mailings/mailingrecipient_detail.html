@@ -6,8 +6,10 @@
 <p>Email: {{ object.email }} </p>
 <p>Ф.И.О.: {{ object.full_name }}</p>
 <p>Комментарий: {{ object.comment|default:"-" }}</p>
+{% if object.owner == request.user %}
 <div class="row">
     <a class="link" href="/mailing_recipient/{{ object.id }}/update/">Редактировать</a>
     <a class="link" href="/mailing_recipient/{{ object.id }}/delete/">Удалить</a>
 </div>
+{% endif %}
 {% endblock %}

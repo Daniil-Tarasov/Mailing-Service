@@ -55,7 +55,7 @@ class MailingForm(ModelForm):
 
     class Meta:
         model = Mailing
-        exclude = ('date_of_first_sending', 'date_of_sending_end', 'status', 'owner',)
+        exclude = ('date_of_first_sending', 'date_of_sending_end', 'status', 'owner', 'mailing_is_working',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -67,3 +67,10 @@ class MailingForm(ModelForm):
         self.fields['recipients'].widget.attrs.update({
             'class': 'form-control'
         })
+
+
+class ManagerMailingForm(ModelForm):
+
+    class Meta:
+        model = Mailing
+        fields = ('mailing_is_working',)

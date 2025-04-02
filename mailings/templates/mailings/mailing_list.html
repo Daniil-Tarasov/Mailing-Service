@@ -12,10 +12,12 @@
     <p>Сообщение: {{ mailing.message }}</p>
     <p>Статус: {{ mailing.status }}</p>
     <div class="d-flex">
+        {% if mailing.owner == request.user %}
         <form method="post" action="{% url 'mailings:send_mailing' mailing.id %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-success btn-sm">Отправить</button>
         </form>
+        {% endif %}
         <a href="/mailing/{{ mailing.id }}">
             <button type="button" class="btn btn-outline-info btn-sm">Подробнее</button>
         </a>

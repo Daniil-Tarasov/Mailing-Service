@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
@@ -7,7 +7,7 @@ from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 
-from mailings.forms import MailingRecipientForm, MessageForm, MailingForm
+from mailings.forms import MailingRecipientForm, MessageForm, MailingForm, ManagerMailingForm
 from mailings.models import MailingRecipient, Message, Mailing
 from mailings.services import send_mailing
 
@@ -31,6 +31,12 @@ class HomeView(View):
 class MailingRecipientsListView(ListView):
     model = MailingRecipient
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
+
 
 class MailingRecipientCreateView(LoginRequiredMixin, CreateView):
     template_name = 'mailings/mailing_recipient_form.html'
@@ -46,6 +52,12 @@ class MailingRecipientCreateView(LoginRequiredMixin, CreateView):
 class MailingRecipientDetailView(LoginRequiredMixin, DetailView):
     model = MailingRecipient
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
+
 
 class MailingRecipientUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'mailings/mailing_recipient_form.html'
@@ -56,16 +68,29 @@ class MailingRecipientUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('mailings:mailing_recipient_detail', args=[self.kwargs.get('pk')])
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
 
-class MessageListView(ListView):
-    model = Message
 
-
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class MailingRecipientDeleteView(LoginRequiredMixin, DeleteView):
     model = MailingRecipient
     template_name = 'mailings/confirm_delete.html'
     success_url = reverse_lazy('mailings:mailing_recipients_list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
+
+
+class MessageListView(ListView):
+    model = Message
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -82,6 +107,12 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 class MessageDetailView(LoginRequiredMixin, DetailView):
     model = Message
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
+
 
 class MessageUpdateView(LoginRequiredMixin,UpdateView):
     template_name = 'mailings/message_form.html'
@@ -92,22 +123,29 @@ class MessageUpdateView(LoginRequiredMixin,UpdateView):
     def get_success_url(self):
         return reverse('mailings:message_detail', args=[self.kwargs.get('pk')])
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'mailings/confirm_delete.html'
     model = Message
     success_url = reverse_lazy('mailings:message_list')
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class MailingsListView(ListView):
     model = Mailing
 
     def get_queryset(self):
-        queryset = cache.get('my_queryset')
-        if not queryset:
-            queryset = super().get_queryset()
-            cache.set('my_queryset', queryset, 60 * 15)
-        return queryset
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user, mailing_is_working=True)
 
 
 class MailingCreateView(LoginRequiredMixin, CreateView):
@@ -119,6 +157,12 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
+    def get_form(self, form_class=MailingForm):
+        form = super().get_form()
+        form.fields['recipients'].queryset = form.fields['recipients'].queryset.filter(owner=self.request.user)
+        form.fields['message'].queryset = form.fields['message'].queryset.filter(owner=self.request.user)
+        return form
+
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
@@ -127,6 +171,12 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['attempts'] = self.object.mailing_attempts.all()
         return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
@@ -138,11 +188,39 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('mailings:mailing_detail', args=[self.kwargs.get('pk')])
 
+    def get_form(self, form_class=MailingForm):
+        form = super().get_form()
+        is_own_instance = self.request.user == self.get_object().owner
+        if is_own_instance:
+            form.fields['recipients'].queryset = form.fields['recipients'].queryset.filter(owner=self.request.user)
+            form.fields['message'].queryset = form.fields['message'].queryset.filter(owner=self.request.user)
+        elif self.request.user.groups.filter(name='Managers').exists():
+            pass
+        return form
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.groups.filter(name='Managers').exists():
+            return queryset
+        return queryset.filter(owner=self.request.user)
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return MailingForm
+        if user.groups.filter(name='Managers').exists():
+            return ManagerMailingForm
+        raise PermissionDenied
+
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     template_name = 'mailings/confirm_delete.html'
     success_url = reverse_lazy('mailings:mailings_list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
 
 
 class SendMailingView(View):

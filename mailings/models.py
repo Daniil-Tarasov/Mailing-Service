@@ -17,6 +17,9 @@ class MailingRecipient(models.Model):
         verbose_name = 'Получатель рассылки'
         verbose_name_plural = 'Получатели рассылки'
         ordering = ['email']
+        permissions = [
+            ('can_view_all_mailing_recipients', 'Can view all mailing recipients')
+        ]
 
 class Message(models.Model):
     subject = models.CharField(max_length=150, verbose_name='Тема письма')
@@ -31,6 +34,9 @@ class Message(models.Model):
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
         ordering = ['subject']
+        permissions = [
+            ('can_view_all_messages', 'Can view all mailing messages')
+        ]
 
 class Mailing(models.Model):
     CREATED = 'Создана'
@@ -60,6 +66,7 @@ class Mailing(models.Model):
     )
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Владелец', related_name='mailing',
                               null=True)
+    mailing_is_working = models.BooleanField(blank=True, null=True, default=True, verbose_name='Рассылка работает')
 
     def __str__(self):
         return f'{self.message}: {self.status}'
@@ -68,6 +75,10 @@ class Mailing(models.Model):
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
         ordering = ['status']
+        permissions = [
+            ('can_view_all_mailings', 'Can view all mailings'),
+            ('can_disabling_mailings', 'Can disabling mailings')
+        ]
 
 
 class MailingAttempts(models.Model):
