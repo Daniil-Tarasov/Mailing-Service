@@ -8,7 +8,7 @@ from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 
 from mailings.forms import MailingRecipientForm, MessageForm, MailingForm, ManagerMailingForm
-from mailings.models import MailingRecipient, Message, Mailing
+from mailings.models import MailingRecipient, Message, Mailing, MailingAttempts
 from mailings.services import send_mailing
 
 
@@ -28,7 +28,7 @@ class HomeView(View):
         return render(request, self.template_name, context)
 
 
-class MailingRecipientsListView(ListView):
+class MailingRecipientsListView(LoginRequiredMixin, ListView):
     model = MailingRecipient
 
     def get_queryset(self):
@@ -83,7 +83,7 @@ class MailingRecipientDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(owner=self.request.user)
 
 
-class MessageListView(ListView):
+class MessageListView(LoginRequiredMixin, ListView):
     model = Message
 
     def get_queryset(self):
@@ -138,7 +138,7 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(owner=self.request.user)
 
 
-class MailingsListView(ListView):
+class MailingsListView(LoginRequiredMixin, ListView):
     model = Mailing
 
     def get_queryset(self):
@@ -221,6 +221,14 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(owner=self.request.user)
+
+
+class MailingAttemptsListView(LoginRequiredMixin, ListView):
+    model = MailingAttempts
+
+    def get_queryset(self):
+        mailing_id = self.kwargs['pk']
+        return MailingAttempts.objects.filter(mailing_id=mailing_id)
 
 
 class SendMailingView(View):

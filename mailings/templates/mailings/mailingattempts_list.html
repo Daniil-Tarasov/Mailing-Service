@@ -1,0 +1,13 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Рассылка{% endblock %}
+
+{% block content %}
+{% for attempt in object_list %}
+<p>Рассылка: {{ attempt.mailing }}</p>
+<p>Статус попытки рассылки: {{ attempt.status|default:"-" }}</p>
+<p>Ответ почтового сервиса: {{ attempt.mail_server_response|default:"-" }}</p>
+<p>Дата попытки отправки: {{ attempt.date_first_attempt|date:"d.m.Y H:i"|default:"-" }}</p>
+{% endfor %}
+<a href="{% url 'mailings:mailings_list' %}">Вернуться к списку рассылок</a>
+{% endblock %}
