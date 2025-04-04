@@ -15,10 +15,7 @@ def send_mailing(mailing):
         mailing.date_of_first_sending = timezone.now()
         mailing.save()
 
-    attempt = MailingAttempts.objects.create(
-        status=MailingAttempts.not_successfully,
-        mailing=mailing
-    )
+    attempt = MailingAttempts.objects.create(status=MailingAttempts.not_successfully, mailing=mailing)
 
     try:
         message = mailing.message
@@ -37,7 +34,7 @@ def send_mailing(mailing):
             )
 
         User.objects.filter(pk=mailing.owner.pk).update(
-            count_sent_messages=F('count_sent_messages') + recipients_count
+            count_sent_messages=F("count_sent_messages") + recipients_count
         )
 
         attempt.status = MailingAttempts.successfully

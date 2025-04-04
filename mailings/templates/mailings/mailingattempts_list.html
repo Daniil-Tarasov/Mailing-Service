@@ -3,11 +3,28 @@
 {% block title %}Рассылка{% endblock %}
 
 {% block content %}
-{% for attempt in object_list %}
-<p>Рассылка: {{ attempt.mailing }}</p>
-<p>Статус попытки рассылки: {{ attempt.status|default:"-" }}</p>
-<p>Ответ почтового сервиса: {{ attempt.mail_server_response|default:"-" }}</p>
-<p>Дата попытки отправки: {{ attempt.date_first_attempt|date:"d.m.Y H:i"|default:"-" }}</p>
-{% endfor %}
-<a href="{% url 'mailings:mailings_list' %}">Вернуться к списку рассылок</a>
+<div class="text-center mb-4">
+    <h1>
+        История попыток рассылки
+    </h1>
+    <a href="{% url 'mailings:mailings_list' %}">Вернуться к списку рассылок</a>
+</div>
+<div class="container">
+  <div class="row align-items-center">
+    {% for attempt in object_list %}
+      <div class="col-md-4 mb-3">
+        <div class="card text-white bg-dark" style="border: 2px solid gray;">
+            <div class="card-header">
+                    <h3>Рассылка: {{ attempt.mailing }}</h3>
+                </div>
+          <div class="card-body text-center">
+                <p>Статус попытки рассылки: {{ attempt.status|default:"-" }} </p>
+                <p>Ответ почтового сервиса: {{ attempt.mail_server_response|default:"-" }}</p>
+                <p>Дата попытки отправки: {{ attempt.date_first_attempt|date:"d.m.Y H:i" }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

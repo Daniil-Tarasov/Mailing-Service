@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0001_initial'),
+        ("mailings", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailingrecipient',
-            name='comment',
-            field=models.TextField(blank=True, null=True, verbose_name='Комментарий'),
+            model_name="mailingrecipient",
+            name="comment",
+            field=models.TextField(blank=True, null=True, verbose_name="Комментарий"),
         ),
     ]

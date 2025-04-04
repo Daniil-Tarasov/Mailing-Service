@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0008_alter_mailing_options'),
+        ("mailings", "0008_alter_mailing_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='mailing',
-            name='mailing_is_working',
-            field=models.BooleanField(blank=True, default=True, null=True, verbose_name='Рассылка работает'),
+            model_name="mailing",
+            name="mailing_is_working",
+            field=models.BooleanField(blank=True, default=True, null=True, verbose_name="Рассылка работает"),
         ),
     ]

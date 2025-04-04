@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailings', '0004_alter_mailingattempts_mail_server_response'),
+        ("mailings", "0004_alter_mailingattempts_mail_server_response"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='mailingattempts',
-            options={'ordering': ['status'], 'verbose_name': 'Попытка рассылки', 'verbose_name_plural': 'Попытки рассылки'},
+            name="mailingattempts",
+            options={
+                "ordering": ["status"],
+                "verbose_name": "Попытка рассылки",
+                "verbose_name_plural": "Попытки рассылки",
+            },
         ),
     ]
