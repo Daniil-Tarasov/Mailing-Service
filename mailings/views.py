@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,6 +12,8 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from mailings.forms import MailingForm, MailingRecipientForm, ManagerMailingForm, MessageForm
 from mailings.models import Mailing, MailingAttempts, MailingRecipient, Message
 from mailings.services import send_mailing
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(View):
@@ -45,7 +49,10 @@ class MailingRecipientCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        try:
+            return super().form_valid(form)
+        except Exception as ex:
+            logger.error(f"Ошибка при создании клиента: {str(ex)}")
 
 
 @method_decorator(cache_page(60 * 5), name="dispatch")
@@ -100,7 +107,10 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        try:
+            return super().form_valid(form)
+        except Exception as ex:
+            logger.error(f"Ошибка при создании сообщения: {str(ex)}")
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -155,7 +165,10 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        try:
+            return super().form_valid(form)
+        except Exception as ex:
+            logger.error(f"Ошибка при создании рассылки: {str(ex)}")
 
     def get_form(self, form_class=MailingForm):
         form = super().get_form()
@@ -236,5 +249,8 @@ class SendMailingView(View):
 
     def post(self, request, pk):
         mailing = get_object_or_404(Mailing, id=pk)
-        send_mailing(mailing)
+        try:
+            send_mailing(mailing)
+        except Exception as ex:
+            logger.error(f"Ошибка при отправке рассылки: {str(ex)} от пользователя {request.user}")
         return redirect("/")

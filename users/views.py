@@ -1,3 +1,4 @@
+import logging
 import secrets
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +15,9 @@ from config import settings
 from mailings.models import MailingAttempts
 from users.forms import ManagerForm, UserForm, UserRegisterForm
 from users.models import User
+
+
+logger = logging.getLogger(__name__)
 
 
 def email_verification(request, token):
@@ -37,13 +41,16 @@ class UserCreateView(CreateView):
         user.save()
         host = self.request.get_host()
         url = f"http://{host}/email-confirm/{token}/"
-        send_mail(
-            "Подтверждение почты",
-            f"Добро пожаловать на сервис для рассылок! Для подтверждения регистрации перейдите по ссылке: {url}",
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-        )
-        return super().form_valid(form)
+        try:
+            send_mail(
+                "Подтверждение почты",
+                f"Добро пожаловать на сервис для рассылок! Для подтверждения регистрации перейдите по ссылке: {url}",
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+            )
+            return super().form_valid(form)
+        except Exception as ex:
+            logging.error(f"Ошибка отправки подтверждения почты {str(ex)}")
 
 
 class PasswordResetUserView(PasswordResetView):
