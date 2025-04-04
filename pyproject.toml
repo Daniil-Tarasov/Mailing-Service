@@ -13,6 +13,7 @@ psycopg2-binary = "^2.9.10"
 ipython = "^9.0.2"
 pillow = "^11.1.0"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "^8.0.0"}
+redis = "^5.2.1"
 
 
 [tool.poetry.group.lint.dependencies]

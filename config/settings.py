@@ -152,6 +152,13 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+CACHES = {
+    'default': {
+        'BACKEND': os.getenv("CACHES_BACKEND"),
+        'LOCATION': os.getenv("CACHES_LOCATION"),
+    }
+}
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
